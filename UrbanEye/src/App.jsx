@@ -1,350 +1,368 @@
 import { useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
+
 import "./App.css";
+import ReportProblem from "./ReportProblem";
 
-function App() {
+const text = {
+  English: {
+    home: "Home",
+    explore: "Explore Pune",
+    report: "Report a Problem",
+    login: "Login",
+    title: "See the Problem. Improve the City.",
+    description:
+      "UrbanEye helps citizens report civic problems and helps cities understand and solve them faster.",
+    reportBtn: "Report a Problem",
+    exploreBtn: "Explore Pune",
+    mapTitle: "Pune Civic Map",
+    reports: "Reports",
+    open: "Open Issues",
+    resolved: "Resolved",
+    trust: "Community Trust",
+  },
+
+  Marathi: {
+    home: "मुख्यपृष्ठ",
+    explore: "पुणे एक्सप्लोर करा",
+    report: "समस्या नोंदवा",
+    login: "लॉगिन",
+    title: "समस्या पाहा. शहर सुधारा.",
+    description:
+      "UrbanEye नागरिकांना नागरी समस्या नोंदवण्यास आणि त्या जलद सोडवण्यास मदत करते.",
+    reportBtn: "समस्या नोंदवा",
+    exploreBtn: "पुणे एक्सप्लोर करा",
+    mapTitle: "पुणे नागरी नकाशा",
+    reports: "अहवाल",
+    open: "प्रलंबित समस्या",
+    resolved: "सोडवलेल्या",
+    trust: "समुदायाचा विश्वास",
+  },
+
+  Hindi: {
+    home: "होम",
+    explore: "पुणे एक्सप्लोर करें",
+    report: "समस्या रिपोर्ट करें",
+    login: "लॉगिन",
+    title: "समस्या देखें। शहर सुधारें।",
+    description:
+      "UrbanEye नागरिकों को नागरिक समस्याओं की रिपोर्ट करने और उन्हें तेजी से हल करने में मदद करता है।",
+    reportBtn: "समस्या रिपोर्ट करें",
+    exploreBtn: "पुणे एक्सप्लोर करें",
+    mapTitle: "पुणे सिविक मैप",
+    reports: "रिपोर्ट",
+    open: "खुली समस्याएं",
+    resolved: "हल की गईं",
+    trust: "समुदाय का विश्वास",
+  },
+};
+
+function Home() {
   const [language, setLanguage] = useState("English");
+  const t = text[language];
 
-  const content = {
-    English: {
-      home: "Home",
-      map: "Explore Pune",
-      report: "Report a Problem",
-      login: "Login",
-      badge: "AI-POWERED CIVIC INTELLIGENCE",
-      title: "See the Problem.",
-      title2: "Improve the City.",
-      description:
-        "Report drainage, garbage and road problems in Pune with photo, location and AI-powered verification.",
-      reportBtn: "Report a Problem",
-      exploreBtn: "Explore Pune Issues",
-      reports: "Reports",
-      open: "Open Issues",
-      resolved: "Resolved",
-      categories: "What can you report?",
-      categoriesText:
-        "Help make Pune cleaner, safer and better by reporting civic problems around you.",
-      drainage: "Drainage",
-      drainageText: "Report blocked drains, overflowing water and drainage problems.",
-      garbage: "Garbage",
-      garbageText: "Report roadside dumping, overflowing bins and waste problems.",
-      roads: "Road Damage",
-      roadsText: "Report potholes, damaged roads and unsafe road conditions.",
-      mapTitle: "Problems across Pune",
-      mapText:
-        "Explore civic issues near you and discover problem hotspots across Pune.",
-      howTitle: "How UrbanEye works",
-      step1: "Capture",
-      step1Text: "Take a photo of the civic problem.",
-      step2: "Locate",
-      step2Text: "UrbanEye adds your location automatically.",
-      step3: "Verify",
-      step3Text: "AI analyzes the reported problem.",
-      step4: "Track",
-      step4Text: "Submit and track your complaint.",
-    },
-
-    Marathi: {
-      home: "मुख्यपृष्ठ",
-      map: "पुणे एक्सप्लोर करा",
-      report: "समस्या नोंदवा",
-      login: "लॉगिन",
-      badge: "AI-आधारित नागरी समस्या प्रणाली",
-      title: "समस्या दाखवा.",
-      title2: "शहर सुधारूया.",
-      description:
-        "फोटो, लोकेशन आणि AI-आधारित पडताळणीसह पुण्यातील ड्रेनेज, कचरा आणि रस्त्यांच्या समस्या नोंदवा.",
-      reportBtn: "समस्या नोंदवा",
-      exploreBtn: "पुण्यातील समस्या पहा",
-      reports: "एकूण तक्रारी",
-      open: "प्रलंबित समस्या",
-      resolved: "सोडवलेल्या समस्या",
-      categories: "तुम्ही काय नोंदवू शकता?",
-      categoriesText:
-        "तुमच्या आसपासच्या नागरी समस्या नोंदवून पुणे अधिक स्वच्छ, सुरक्षित आणि चांगले बनवण्यास मदत करा.",
-      drainage: "ड्रेनेज",
-      drainageText: "बंद नाले, साचलेले पाणी आणि ड्रेनेजच्या समस्या नोंदवा.",
-      garbage: "कचरा",
-      garbageText: "रस्त्यावरील कचरा, भरलेले कचराकुंड आणि कचऱ्याच्या समस्या नोंदवा.",
-      roads: "रस्त्यांचे नुकसान",
-      roadsText: "खड्डे, खराब रस्ते आणि धोकादायक रस्त्यांची स्थिती नोंदवा.",
-      mapTitle: "पुण्यातील समस्या",
-      mapText:
-        "तुमच्या जवळील नागरी समस्या पहा आणि पुण्यातील समस्या असलेले भाग शोधा.",
-      howTitle: "UrbanEye कसे काम करते?",
-      step1: "फोटो घ्या",
-      step1Text: "नागरी समस्येचा फोटो घ्या.",
-      step2: "लोकेशन",
-      step2Text: "UrbanEye तुमचे लोकेशन आपोआप घेईल.",
-      step3: "पडताळणी",
-      step3Text: "AI नोंदवलेल्या समस्येचे विश्लेषण करेल.",
-      step4: "ट्रॅक करा",
-      step4Text: "तक्रार नोंदवा आणि तिचा status track करा.",
-    },
-
-    Hindi: {
-      home: "होम",
-      map: "पुणे एक्सप्लोर करें",
-      report: "समस्या दर्ज करें",
-      login: "लॉगिन",
-      badge: "AI-आधारित नागरिक समस्या प्रणाली",
-      title: "समस्या दिखाएं।",
-      title2: "शहर को बेहतर बनाएं।",
-      description:
-        "फोटो, लोकेशन और AI-आधारित सत्यापन के साथ पुणे की ड्रेनेज, कचरा और सड़क की समस्याएं दर्ज करें।",
-      reportBtn: "समस्या दर्ज करें",
-      exploreBtn: "पुणे की समस्याएं देखें",
-      reports: "कुल शिकायतें",
-      open: "लंबित समस्याएं",
-      resolved: "हल की गईं",
-      categories: "आप क्या रिपोर्ट कर सकते हैं?",
-      categoriesText:
-        "अपने आसपास की नागरिक समस्याओं की रिपोर्ट करके पुणे को स्वच्छ, सुरक्षित और बेहतर बनाने में मदद करें।",
-      drainage: "ड्रेनेज",
-      drainageText: "बंद नालियों, जमा पानी और ड्रेनेज की समस्याएं रिपोर्ट करें।",
-      garbage: "कचरा",
-      garbageText: "सड़क किनारे कचरा, भरे हुए डिब्बे और कचरे की समस्याएं रिपोर्ट करें।",
-      roads: "सड़क की समस्या",
-      roadsText: "गड्ढे, खराब सड़कें और असुरक्षित सड़क की स्थिति रिपोर्ट करें।",
-      mapTitle: "पुणे की समस्याएं",
-      mapText:
-        "अपने आसपास की नागरिक समस्याएं देखें और पुणे के समस्या वाले क्षेत्रों को खोजें।",
-      howTitle: "UrbanEye कैसे काम करता है?",
-      step1: "फोटो लें",
-      step1Text: "नागरिक समस्या की फोटो लें।",
-      step2: "लोकेशन",
-      step2Text: "UrbanEye आपकी लोकेशन अपने आप लेगा।",
-      step3: "सत्यापन",
-      step3Text: "AI रिपोर्ट की गई समस्या का विश्लेषण करेगा।",
-      step4: "ट्रैक करें",
-      step4Text: "शिकायत दर्ज करें और उसका status track करें।",
-    },
+  const goToExplore = () => {
+    document.getElementById("explore")?.scrollIntoView({
+      behavior: "smooth",
+    });
   };
-
-  const t = content[language];
 
   return (
     <div className="app">
-
-      {/* Navbar */}
+      {/* NAVBAR */}
       <nav className="navbar">
-        <div className="logo">
-          <span className="logo-eye">◉</span>
-          <span>Urban<span>Eye</span></span>
-        </div>
+        <Link to="/" className="logo">
+          Urban<span>Eye</span>
+        </Link>
 
         <div className="nav-links">
-          <a href="#home">{t.home}</a>
-          <a href="#map">{t.map}</a>
-          <a href="#categories">{t.report}</a>
+          <Link to="/">{t.home}</Link>
 
+          <button
+            type="button"
+            className="nav-link-button"
+            onClick={goToExplore}
+          >
+            {t.explore}
+          </button>
+
+          <Link to="/report">{t.report}</Link>
+
+          <Link to="/login">{t.login}</Link>
+        </div>
+
+        <div className="nav-actions">
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="language-select"
+            aria-label="Select language"
           >
             <option value="English">English</option>
             <option value="Marathi">मराठी</option>
             <option value="Hindi">हिन्दी</option>
           </select>
-
-          <button className="login-btn">{t.login}</button>
         </div>
       </nav>
 
-      {/* Hero */}
-      <main id="home">
-        <section className="hero-section">
-
+      <main>
+        {/* HERO */}
+        <section className="hero">
           <div className="hero-content">
-
-            <div className="hero-badge">
-              ✦ {t.badge}
+            <div className="badge">
+              ✦ AI-POWERED CIVIC INTELLIGENCE PLATFORM
             </div>
 
-            <h1>
-              {t.title}
-              <br />
-              <span>{t.title2}</span>
-            </h1>
+            <h1>{t.title}</h1>
 
             <p>{t.description}</p>
 
             <div className="hero-buttons">
-              <button className="primary-btn">
-                📍 {t.reportBtn}
-              </button>
+              <Link to="/report" className="primary-btn">
+                {t.reportBtn} →
+              </Link>
 
-              <button className="secondary-btn">
-                🗺️ {t.exploreBtn}
+              <button
+                type="button"
+                className="secondary-btn"
+                onClick={goToExplore}
+              >
+                {t.exploreBtn} ↗
               </button>
             </div>
-
           </div>
 
-          <div className="hero-visual">
+          {/* HERO MAP */}
+          <div className="hero-map">
+            <div className="map-card">
+              <div className="map-card-top">
+                <span>📍</span>
+                <strong>{t.mapTitle}</strong>
+              </div>
 
-            <div className="city-card">
-              <div className="city-grid"></div>
+              <div className="map-visual">
+                <div className="map-road road1"></div>
+                <div className="map-road road2"></div>
+                <div className="map-road road3"></div>
 
-              <div className="map-point point-one">●</div>
-              <div className="map-point point-two">●</div>
-              <div className="map-point point-three">●</div>
+                <span className="map-marker red">●</span>
+                <span className="map-marker yellow">●</span>
+                <span className="map-marker green">●</span>
+              </div>
 
-              <div className="map-label">
-                📍 Pune
+              <div className="map-bottom">
+                <span>● Live reports</span>
+                <span>Pune</span>
               </div>
             </div>
-
           </div>
-
         </section>
 
-        {/* Statistics */}
-        <section className="stats-section">
-
-          <div className="stat-card">
-            <strong>12,480+</strong>
+        {/* STATS */}
+        <section className="stats">
+          <div>
+            <strong>1,248</strong>
             <span>{t.reports}</span>
           </div>
 
-          <div className="stat-card">
-            <strong>3,214</strong>
+          <div>
+            <strong>321</strong>
             <span>{t.open}</span>
           </div>
 
-          <div className="stat-card">
-            <strong>9,266</strong>
+          <div>
+            <strong>927</strong>
             <span>{t.resolved}</span>
           </div>
 
+          <div>
+            <strong>94%</strong>
+            <span>{t.trust}</span>
+          </div>
         </section>
 
-        {/* Categories */}
-        <section id="categories" className="categories-section">
+        {/* CATEGORIES */}
+        <section className="categories">
+          <div className="section-title">
+            <small>REPORT A PROBLEM</small>
 
-          <div className="section-heading">
-            <div className="section-badge">CIVIC REPORTING</div>
+            <h2>What did you find?</h2>
 
-            <h2>{t.categories}</h2>
-
-            <p>{t.categoriesText}</p>
+            <p>
+              Choose an issue and help improve your neighbourhood.
+            </p>
           </div>
 
           <div className="category-grid">
+            <Link to="/report" className="category-card">
+              <span>🚰</span>
+              <h3>Drainage</h3>
+              <p>Blocked or overflowing drainage</p>
+            </Link>
 
-            <div className="category-card drainage">
-              <div className="category-icon">💧</div>
-              <h3>{t.drainage}</h3>
-              <p>{t.drainageText}</p>
-              <button>{t.reportBtn} →</button>
-            </div>
+            <Link to="/report" className="category-card">
+              <span>🗑️</span>
+              <h3>Garbage</h3>
+              <p>Roadside garbage or dumping</p>
+            </Link>
 
-            <div className="category-card garbage">
-              <div className="category-icon">🗑️</div>
-              <h3>{t.garbage}</h3>
-              <p>{t.garbageText}</p>
-              <button>{t.reportBtn} →</button>
-            </div>
-
-            <div className="category-card roads">
-              <div className="category-icon">🕳️</div>
-              <h3>{t.roads}</h3>
-              <p>{t.roadsText}</p>
-              <button>{t.reportBtn} →</button>
-            </div>
-
+            <Link to="/report" className="category-card">
+              <span>🕳️</span>
+              <h3>Potholes</h3>
+              <p>Potholes or damaged roads</p>
+            </Link>
           </div>
-
         </section>
 
-        {/* Map Preview */}
-        <section id="map" className="map-section">
+        {/* EXPLORE */}
+        <section className="explore" id="explore">
+          <div>
+            <small>EXPLORE PUNE</small>
 
-          <div className="map-text">
-            <div className="section-badge">LIVE CITY VIEW</div>
+            <h2>Understand your city.</h2>
 
-            <h2>{t.mapTitle}</h2>
-
-            <p>{t.mapText}</p>
-
-            <button className="primary-btn">
-              🗺️ {t.exploreBtn}
-            </button>
+            <p>
+              Explore reported civic issues across Pune.
+            </p>
           </div>
 
-          <div className="map-preview">
-
-            <div className="map-road road-one"></div>
-            <div className="map-road road-two"></div>
-            <div className="map-road road-three"></div>
-
-            <div className="hotspot red">●</div>
-            <div className="hotspot yellow">●</div>
-            <div className="hotspot green">●</div>
-
-            <div className="map-city-name">
-              PUNE
-            </div>
-
+          <div className="real-map">
+            <iframe
+              title="Pune Map"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=73.75%2C18.45%2C73.95%2C18.65&layer=mapnik"
+            ></iframe>
           </div>
-
         </section>
 
-        {/* How it works */}
-        <section className="how-section">
+        {/* HOW IT WORKS */}
+        <section className="how">
+          <small>HOW IT WORKS</small>
 
-          <div className="section-heading">
-            <div className="section-badge">SIMPLE PROCESS</div>
-            <h2>{t.howTitle}</h2>
+          <h2>From problem to action.</h2>
+
+          <div className="steps">
+            <div>
+              <b>01</b>
+              <span>📸</span>
+              <h3>Report</h3>
+              <p>Take a photo and report the issue.</p>
+            </div>
+
+            <div>
+              <b>02</b>
+              <span>🤖</span>
+              <h3>AI Verifies</h3>
+              <p>AI helps identify the problem.</p>
+            </div>
+
+            <div>
+              <b>03</b>
+              <span>📊</span>
+              <h3>Prioritize</h3>
+              <p>Issues are classified by severity.</p>
+            </div>
+
+            <div>
+              <b>04</b>
+              <span>✅</span>
+              <h3>Resolve</h3>
+              <p>Authorities can resolve issues.</p>
+            </div>
           </div>
-
-          <div className="steps-grid">
-
-            <div className="step-card">
-              <div className="step-number">01</div>
-              <h3>{t.step1}</h3>
-              <p>{t.step1Text}</p>
-            </div>
-
-            <div className="step-card">
-              <div className="step-number">02</div>
-              <h3>{t.step2}</h3>
-              <p>{t.step2Text}</p>
-            </div>
-
-            <div className="step-card">
-              <div className="step-number">03</div>
-              <h3>{t.step3}</h3>
-              <p>{t.step3Text}</p>
-            </div>
-
-            <div className="step-card">
-              <div className="step-number">04</div>
-              <h3>{t.step4}</h3>
-              <p>{t.step4Text}</p>
-            </div>
-
-          </div>
-
         </section>
-
       </main>
 
-      {/* Footer */}
-      <footer className="footer">
-        <div>
-          <div className="logo">
-            <span className="logo-eye">◉</span>
-            <span>Urban<span>Eye</span></span>
-          </div>
+      {/* FOOTER */}
+      <footer>
+        <Link to="/" className="logo">
+          Urban<span>Eye</span>
+        </Link>
 
-          <p>See the Problem. Improve the City.</p>
+        <div>
+          <Link to="/">{t.home}</Link>
+          <Link to="/report">{t.report}</Link>
+          <Link to="/login">{t.login}</Link>
         </div>
 
-        <p>© 2026 UrbanEye. Civic intelligence for Pune.</p>
+        <p>© 2026 UrbanEye</p>
       </footer>
-
     </div>
+  );
+}
+
+/* LOGIN PAGE */
+function Login() {
+  const navigate = useNavigate();
+
+  const [message, setMessage] = useState("");
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setMessage("Login UI is ready. Backend authentication will be added later.");
+  };
+
+  return (
+    <div className="simple-page">
+      <div className="simple-card">
+        <h1>UrbanEye Login</h1>
+
+        <p>Login to continue.</p>
+
+        <form onSubmit={handleLogin}>
+          <input
+            placeholder="Email"
+            type="email"
+            required
+          />
+
+          <input
+            placeholder="Password"
+            type="password"
+            required
+          />
+
+          <button type="submit" className="primary-btn">
+            Login
+          </button>
+        </form>
+
+        {message && <div className="login-message">{message}</div>}
+
+        <button
+          type="button"
+          className="back-btn"
+          onClick={() => navigate("/")}
+        >
+          ← Back to Home
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* APP */
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+        <Route
+          path="/report"
+          element={<ReportProblem />}
+        />
+
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
