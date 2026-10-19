@@ -1,29 +1,17 @@
 
 import { useEffect, useState } from "react";
+import { useLanguage } from "./LanguageContext";
 import "./ReportProblem.css";
 
 const categories = [
-  {
-    id: "drainage",
-    icon: "🚰",
-    title: "Drainage",
-    text: "Blocked or overflowing drainage",
-  },
-  {
-    id: "garbage",
-    icon: "🗑️",
-    title: "Garbage",
-    text: "Roadside garbage or dumping",
-  },
-  {
-    id: "pothole",
-    icon: "🕳️",
-    title: "Pothole",
-    text: "Potholes or damaged roads",
-  },
+  { id: "drainage", icon: "🚰", titleKey: "drainage", textKey: "drainageDesc" },
+  { id: "garbage", icon: "🗑️", titleKey: "garbage", textKey: "garbageDesc" },
+  { id: "pothole", icon: "🕳️", titleKey: "pothole", textKey: "potholeDesc" },
 ];
 
 function ReportProblem() {
+  const { t } = useLanguage();
+
   const [category, setCategory] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -42,17 +30,16 @@ function ReportProblem() {
 
   function handleImage(event) {
     const file = event.target.files?.[0];
-
     if (!file) return;
 
     if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-      setError("Please select a JPG, PNG, or WebP image.");
+      setError(t.invalidImage);
       event.target.value = "";
       return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      setError("Image size must be 10 MB or less.");
+      setError(t.largeImage);
       event.target.value = "";
       return;
     }
@@ -66,22 +53,20 @@ function ReportProblem() {
     setLocationMessage("");
 
     if (!navigator.geolocation) {
-      setLocationMessage("Location is not supported by this browser.");
+      setLocationMessage(t.locationUnsupported);
       return;
     }
 
-    setLocationMessage("Detecting your location...");
+    setLocationMessage(t.locationDetecting);
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
         setLocation(`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
-        setLocationMessage("Location detected successfully.");
+        setLocationMessage(t.locationDetected);
       },
       () => {
-        setLocationMessage(
-          "Unable to get location. Allow browser permission or enter it manually."
-        );
+        setLocationMessage(t.locationFailed);
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
@@ -92,17 +77,17 @@ function ReportProblem() {
     setError("");
 
     if (!category) {
-      setError("Please select a problem category.");
+      setError(t.requiredCategory);
       return;
     }
 
     if (!location.trim()) {
-      setError("Please enter the problem location.");
+      setError(t.requiredLocation);
       return;
     }
 
     if (description.trim().length < 10) {
-      setError("Please describe the problem in at least 10 characters.");
+      setError(t.shortDescription);
       return;
     }
 
@@ -110,8 +95,7 @@ function ReportProblem() {
 
     setSuccess({
       id: complaintId,
-      category: categories.find((item) => item.id === category)?.title,
-      status: "Submitted (Demo)",
+      category: categories.find((item) => item.id === category)?.titleKey,
     });
   }
 
@@ -133,28 +117,32 @@ function ReportProblem() {
         <div className="report-container report-success">
           <div className="success-icon">✓</div>
           <div className="report-badge">URBANEYE REPORT</div>
-          <h1>Report <span>Ready!</span></h1>
-          <p>
-            Your demo report has been prepared successfully.
-            It has not been saved to a database.
-          </p>
+
+          <h1>
+            {t.reportReady}
+          </h1>
+
+          <p>{t.demoSuccess}</p>
 
           <div className="success-details">
             <div>
-              <span>Demo Complaint ID</span>
+              <span>{t.complaintId}</span>
               <strong>{success.id}</strong>
             </div>
+
             <div>
-              <span>Category</span>
-              <strong>{success.category}</strong>
+              <span>{t.selectCategory}</span>
+              <strong>{t[success.category]}</strong>
             </div>
+
             <div>
-              <span>Severity</span>
-              <strong>{severity}</strong>
+              <span>{t.severity}</span>
+              <strong>{t[severity.toLowerCase()]}</strong>
             </div>
+
             <div>
-              <span>Status</span>
-              <strong>{success.status}</strong>
+              <span>{t.status}</span>
+              <strong>{t.submittedDemo}</strong>
             </div>
           </div>
 
@@ -163,7 +151,7 @@ function ReportProblem() {
             type="button"
             onClick={resetForm}
           >
-            Create Another Report <span>→</span>
+            {t.anotherReport} <span>→</span>
           </button>
         </div>
       </div>
@@ -175,23 +163,24 @@ function ReportProblem() {
       <div className="report-container">
         <header className="report-header">
           <div className="report-badge">✦ URBANEYE REPORT</div>
-          <h1>Report a <span>Problem</span></h1>
-          <p>
-            Help improve Pune by reporting a civic issue near you.
-          </p>
+          <h1>{t.problemTitle}</h1>
+          <p>{t.problemDescription}</p>
         </header>
 
         <div className="report-progress">
           <div className="progress-step active">
-            <span>1</span><p>Problem</p>
+            <span>1</span>
+            <p>{t.problemTitle}</p>
           </div>
           <div className="progress-line" />
           <div className="progress-step active">
-            <span>2</span><p>Details</p>
+            <span>2</span>
+            <p>{t.describeTitle}</p>
           </div>
           <div className="progress-line" />
           <div className="progress-step">
-            <span>3</span><p>Submit</p>
+            <span>3</span>
+            <p>{t.submit}</p>
           </div>
         </div>
 
@@ -200,8 +189,8 @@ function ReportProblem() {
             <div className="card-heading">
               <span className="heading-number">01</span>
               <div>
-                <h2>What is the problem?</h2>
-                <p>Select the type of civic issue.</p>
+                <h2>{t.selectCategory}</h2>
+                <p>{t.categoryDescription}</p>
               </div>
             </div>
 
@@ -221,8 +210,8 @@ function ReportProblem() {
                 >
                   <div className="report-category-icon">{item.icon}</div>
                   <div className="report-category-text">
-                    <h3>{item.title}</h3>
-                    <p>{item.text}</p>
+                    <h3>{t[item.titleKey]}</h3>
+                    <p>{t[item.textKey]}</p>
                   </div>
                   <div className="category-check">
                     {category === item.id ? "✓" : ""}
@@ -236,20 +225,20 @@ function ReportProblem() {
             <div className="card-heading">
               <span className="heading-number">02</span>
               <div>
-                <h2>Add a photo</h2>
-                <p>Upload a photo to help explain the issue.</p>
+                <h2>{t.addPhoto}</h2>
+                <p>{t.photoDescription}</p>
               </div>
             </div>
 
             <label className="upload-area">
               {imagePreview ? (
-                <img src={imagePreview} alt="Selected civic issue" />
+                <img src={imagePreview} alt={t.chooseImage} />
               ) : (
                 <>
                   <div className="upload-icon">📷</div>
-                  <h3>Upload a photo</h3>
-                  <p>Click to choose an image from your device</p>
-                  <span>JPG, PNG or WebP · Max 10 MB</span>
+                  <h3>{t.uploadPhoto}</h3>
+                  <p>{t.chooseImage}</p>
+                  <span>{t.imageLimit}</span>
                 </>
               )}
 
@@ -271,7 +260,7 @@ function ReportProblem() {
                     setImagePreview("");
                   }}
                 >
-                  Remove photo
+                  {t.removePhoto}
                 </button>
               </div>
             )}
@@ -281,8 +270,8 @@ function ReportProblem() {
             <div className="card-heading">
               <span className="heading-number">03</span>
               <div>
-                <h2>Where is the problem?</h2>
-                <p>Enter the location of the civic issue.</p>
+                <h2>{t.locationTitle}</h2>
+                <p>{t.locationDescription}</p>
               </div>
             </div>
 
@@ -293,8 +282,8 @@ function ReportProblem() {
             >
               <span>📍</span>
               <div>
-                <strong>Use my current location</strong>
-                <small>Allow location access in your browser</small>
+                <strong>{t.currentLocation}</strong>
+                <small>{t.locationPermission}</small>
               </div>
               <span className="location-arrow">→</span>
             </button>
@@ -306,14 +295,15 @@ function ReportProblem() {
             )}
 
             <label className="field-label" htmlFor="report-location">
-              Location or coordinates *
+              {t.locationLabel} *
             </label>
+
             <input
               id="report-location"
               className="report-input"
               value={location}
               onChange={(event) => setLocation(event.target.value)}
-              placeholder="Enter area, street, or coordinates"
+              placeholder={t.locationPlaceholder}
               required
             />
           </section>
@@ -322,33 +312,35 @@ function ReportProblem() {
             <div className="card-heading">
               <span className="heading-number">04</span>
               <div>
-                <h2>Describe the problem</h2>
-                <p>Tell us a little more about what you found.</p>
+                <h2>{t.describeTitle}</h2>
+                <p>{t.describeDescription}</p>
               </div>
             </div>
 
             <label className="field-label" htmlFor="report-severity">
-              Severity
+              {t.severity}
             </label>
+
             <select
               id="report-severity"
               className="report-input"
               value={severity}
               onChange={(event) => setSeverity(event.target.value)}
             >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
+              <option value="Low">{t.low}</option>
+              <option value="Medium">{t.medium}</option>
+              <option value="High">{t.high}</option>
             </select>
 
             <label className="field-label" htmlFor="report-description">
-              Description *
+              {t.descriptionLabel} *
             </label>
+
             <textarea
               id="report-description"
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              placeholder="Example: Large pothole near the main road..."
+              placeholder={t.descriptionPlaceholder}
               minLength={10}
               maxLength={500}
               required
@@ -362,13 +354,10 @@ function ReportProblem() {
           <div className="ai-info">
             <div className="ai-icon">🤖</div>
             <div>
-              <h3>AI Verification</h3>
-              <p>
-                AI photo verification is planned for a future version.
-                No AI analysis is performed in this demo.
-              </p>
+              <h3>{t.aiTitle}</h3>
+              <p>{t.aiDescription}</p>
             </div>
-            <span className="ai-status">PLANNED</span>
+            <span className="ai-status">{t.planned}</span>
           </div>
 
           {error && (
@@ -378,12 +367,10 @@ function ReportProblem() {
           )}
 
           <button className="submit-report" type="submit">
-            Submit Demo Report <span>→</span>
+            {t.submit} <span>→</span>
           </button>
 
-          <p className="privacy-note">
-            🔒 Demo only. Your report is not sent to a server or database.
-          </p>
+          <p className="privacy-note">{t.privacy}</p>
         </form>
       </div>
     </div>

@@ -11,61 +11,10 @@ import {
 import "./App.css";
 import ReportProblem from "./ReportProblem";
 import CivicMap from "./CivicMap";
-
-const text = {
-  English: {
-    home: "Home",
-    explore: "Explore Pune",
-    report: "Report a Problem",
-    login: "Login",
-    title: "See the Problem. Improve the City.",
-    description:
-      "UrbanEye helps citizens report civic problems and helps cities understand and solve them faster.",
-    reportBtn: "Report a Problem",
-    exploreBtn: "Explore Pune",
-    mapTitle: "Pune Civic Map",
-    reports: "Reports",
-    open: "Open Issues",
-    resolved: "Resolved",
-    trust: "Community Trust",
-  },
-  Marathi: {
-    home: "मुख्यपृष्ठ",
-    explore: "पुणे एक्सप्लोर करा",
-    report: "समस्या नोंदवा",
-    login: "लॉगिन",
-    title: "समस्या पाहा. शहर सुधारा.",
-    description:
-      "UrbanEye नागरिकांना नागरी समस्या नोंदवण्यास आणि त्या जलद सोडवण्यास मदत करते.",
-    reportBtn: "समस्या नोंदवा",
-    exploreBtn: "पुणे एक्सप्लोर करा",
-    mapTitle: "पुणे नागरी नकाशा",
-    reports: "अहवाल",
-    open: "प्रलंबित समस्या",
-    resolved: "सोडवलेल्या",
-    trust: "समुदायाचा विश्वास",
-  },
-  Hindi: {
-    home: "होम",
-    explore: "पुणे एक्सप्लोर करें",
-    report: "समस्या रिपोर्ट करें",
-    login: "लॉगिन",
-    title: "समस्या देखें। शहर सुधारें।",
-    description:
-      "UrbanEye नागरिकों को नागरिक समस्याओं की रिपोर्ट करने और उन्हें तेजी से हल करने में मदद करता है।",
-    reportBtn: "समस्या रिपोर्ट करें",
-    exploreBtn: "पुणे एक्सप्लोर करें",
-    mapTitle: "पुणे सिविक मैप",
-    reports: "रिपोर्ट",
-    open: "खुली समस्याएं",
-    resolved: "हल की गईं",
-    trust: "समुदाय का विश्वास",
-  },
-};
+import { LanguageProvider, useLanguage } from "./LanguageContext";
 
 function Home() {
-  const [language, setLanguage] = useState("English");
-  const t = text[language];
+  const { language, changeLanguage, t } = useLanguage();
 
   const goToExplore = () => {
     document.getElementById("explore")?.scrollIntoView({
@@ -82,7 +31,6 @@ function Home() {
 
         <div className="nav-links">
           <Link to="/">{t.home}</Link>
-
           <button
             type="button"
             className="nav-link-button"
@@ -90,7 +38,6 @@ function Home() {
           >
             {t.explore}
           </button>
-
           <Link to="/report">{t.report}</Link>
           <Link to="/login">{t.login}</Link>
         </div>
@@ -98,7 +45,7 @@ function Home() {
         <div className="nav-actions">
           <select
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={(e) => changeLanguage(e.target.value)}
             aria-label="Select language"
           >
             <option value="English">English</option>
@@ -145,7 +92,7 @@ function Home() {
               </div>
 
               <div className="map-bottom">
-                <span>● Demo reports</span>
+                <span>● {t.demoReports}</span>
                 <span>Pune</span>
               </div>
             </div>
@@ -157,17 +104,14 @@ function Home() {
             <strong>1,248</strong>
             <span>{t.reports}</span>
           </div>
-
           <div>
             <strong>321</strong>
             <span>{t.open}</span>
           </div>
-
           <div>
             <strong>927</strong>
             <span>{t.resolved}</span>
           </div>
-
           <div>
             <strong>94%</strong>
             <span>{t.trust}</span>
@@ -176,39 +120,37 @@ function Home() {
 
         <section className="categories">
           <div className="section-title">
-            <small>REPORT A PROBLEM</small>
-            <h2>What did you find?</h2>
-            <p>
-              Choose an issue and help improve your neighbourhood.
-            </p>
+            <small>{t.categoryLabel}</small>
+            <h2>{t.categoryHeading}</h2>
+            <p>{t.categoryDescription}</p>
           </div>
 
           <div className="category-grid">
             <Link to="/report" className="category-card">
               <span>🚰</span>
-              <h3>Drainage</h3>
-              <p>Blocked or overflowing drainage</p>
+              <h3>{t.drainage}</h3>
+              <p>{t.drainageDesc}</p>
             </Link>
 
             <Link to="/report" className="category-card">
               <span>🗑️</span>
-              <h3>Garbage</h3>
-              <p>Roadside garbage or dumping</p>
+              <h3>{t.garbage}</h3>
+              <p>{t.garbageDesc}</p>
             </Link>
 
             <Link to="/report" className="category-card">
               <span>🕳️</span>
-              <h3>Potholes</h3>
-              <p>Potholes or damaged roads</p>
+              <h3>{t.pothole}</h3>
+              <p>{t.potholeDesc}</p>
             </Link>
           </div>
         </section>
 
         <section className="explore" id="explore">
           <div>
-            <small>EXPLORE PUNE</small>
-            <h2>Understand your city.</h2>
-            <p>Explore the Pune area on the interactive map.</p>
+            <small>{t.explore}</small>
+            <h2>{t.exploreHeading}</h2>
+            <p>{t.exploreDescription}</p>
           </div>
 
           <div className="real-map">
@@ -217,36 +159,36 @@ function Home() {
         </section>
 
         <section className="how">
-          <small>HOW IT WORKS</small>
-          <h2>From problem to action.</h2>
+          <small>{t.howLabel}</small>
+          <h2>{t.howHeading}</h2>
 
           <div className="steps">
             <div>
               <b>01</b>
               <span>📸</span>
-              <h3>Report</h3>
-              <p>Take a photo and report the issue.</p>
+              <h3>{t.stepReport}</h3>
+              <p>{t.stepReportDesc}</p>
             </div>
 
             <div>
               <b>02</b>
               <span>🤖</span>
-              <h3>AI Verifies</h3>
-              <p>AI helps identify the problem.</p>
+              <h3>{t.stepAI}</h3>
+              <p>{t.stepAIDesc}</p>
             </div>
 
             <div>
               <b>03</b>
               <span>📊</span>
-              <h3>Prioritize</h3>
-              <p>Issues are classified by severity.</p>
+              <h3>{t.stepPriority}</h3>
+              <p>{t.stepPriorityDesc}</p>
             </div>
 
             <div>
               <b>04</b>
               <span>✅</span>
-              <h3>Resolve</h3>
-              <p>Authorities can resolve issues.</p>
+              <h3>{t.stepResolve}</h3>
+              <p>{t.stepResolveDesc}</p>
             </div>
           </div>
         </section>
@@ -271,38 +213,49 @@ function Home() {
 
 function Login() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [message, setMessage] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setMessage(
-      "Login UI is ready. Backend authentication will be added later."
-    );
+    setMessage(t.loginMessage);
   };
 
   return (
     <div className="simple-page">
       <div className="simple-card">
-        <h1>UrbanEye Login</h1>
-        <p>Login to continue.</p>
+        <h1>{t.loginTitle}</h1>
+        <p>{t.loginDescription}</p>
 
         <form onSubmit={handleLogin}>
-          <input placeholder="Email" type="email" required />
-          <input placeholder="Password" type="password" required />
+          <input
+            placeholder={t.email}
+            type="email"
+            aria-label={t.email}
+            required
+          />
+          <input
+            placeholder={t.password}
+            type="password"
+            aria-label={t.password}
+            required
+          />
 
           <button type="submit" className="primary-btn">
-            Login
+            {t.login}
           </button>
         </form>
 
-        {message && <div className="login-message">{message}</div>}
+        {message && (
+          <div className="login-message">{message}</div>
+        )}
 
         <button
           type="button"
           className="back-btn"
           onClick={() => navigate("/")}
         >
-          ← Back to Home
+          ← {t.backHome}
         </button>
       </div>
     </div>
@@ -311,13 +264,15 @@ function Login() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/report" element={<ReportProblem />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
+    <LanguageProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/report" element={<ReportProblem />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 }
 

@@ -1,0 +1,317 @@
+
+import { createContext, useContext, useState } from "react";
+
+const translations = {
+  English: {
+    home: "Home",
+    explore: "Explore Pune",
+    report: "Report a Problem",
+    login: "Login",
+    title: "See the Problem. Improve the City.",
+    description:
+      "UrbanEye helps citizens report civic problems and helps cities understand and solve them faster.",
+    reportBtn: "Report a Problem",
+    exploreBtn: "Explore Pune",
+    mapTitle: "Pune Civic Map",
+    reports: "Reports",
+    open: "Open Issues",
+    resolved: "Resolved",
+    trust: "Community Trust",
+    demoReports: "● Demo reports",
+    categoryHeading: "What did you find?",
+    categoryDescription:
+      "Choose an issue and help improve your neighbourhood.",
+    categoryLabel: "REPORT A PROBLEM",
+    drainage: "Drainage",
+    drainageDesc: "Blocked or overflowing drainage",
+    garbage: "Garbage",
+    garbageDesc: "Roadside garbage or dumping",
+    pothole: "Potholes",
+    potholeDesc: "Potholes or damaged roads",
+    exploreHeading: "Understand your city.",
+    exploreDescription: "Explore the Pune area on the interactive map.",
+    howLabel: "HOW IT WORKS",
+    howHeading: "From problem to action.",
+    stepReport: "Report",
+    stepReportDesc: "Take a photo and report the issue.",
+    stepAI: "AI Verifies",
+    stepAIDesc: "AI helps identify the problem.",
+    stepPriority: "Prioritize",
+    stepPriorityDesc: "Issues are classified by severity.",
+    stepResolve: "Resolve",
+    stepResolveDesc: "Authorities can resolve issues.",
+    problemTitle: "Report a Problem",
+    selectCategory: "Select the type of civic issue.",
+    addPhoto: "Add a photo",
+    photoDescription: "A photo helps explain the issue.",
+    uploadPhoto: "Upload a photo",
+    chooseImage: "Click to choose an image from your device",
+    imageLimit: "JPG, PNG or WebP · Max 10 MB",
+    removePhoto: "Remove photo",
+    locationTitle: "Where is the problem?",
+    locationDescription: "Enter the location of the civic issue.",
+    currentLocation: "Use my current location",
+    locationPermission: "Allow location access in your browser",
+    locationDetected: "Location detected successfully.",
+    locationDetecting: "Detecting your location...",
+    locationFailed:
+      "Unable to get location. Allow browser permission or enter it manually.",
+    locationUnsupported: "Location is not supported by this browser.",
+    locationLabel: "Location or coordinates",
+    locationPlaceholder: "Enter area, street, or coordinates",
+    describeTitle: "Describe the problem",
+    describeDescription: "Tell us a little more about what you found.",
+    severity: "Severity",
+    low: "Low",
+    medium: "Medium",
+    high: "High",
+    descriptionLabel: "Description",
+    descriptionPlaceholder: "Example: Large pothole near the main road...",
+    aiTitle: "AI Verification",
+    aiDescription:
+      "AI photo verification is planned for a future version. No AI analysis is performed in this demo.",
+    planned: "PLANNED",
+    submit: "Submit Demo Report",
+    privacy: "Demo only. Your report is not sent to a server or database.",
+    requiredCategory: "Please select a problem category.",
+    requiredLocation: "Please enter the problem location.",
+    shortDescription:
+      "Please describe the problem in at least 10 characters.",
+    invalidImage: "Please select a JPG, PNG, or WebP image.",
+    largeImage: "Image size must be 10 MB or less.",
+    reportReady: "Report Ready!",
+    demoSuccess:
+      "Your demo report has been prepared successfully. It has not been saved to a database.",
+    complaintId: "Demo Complaint ID",
+    status: "Status",
+    submittedDemo: "Submitted (Demo)",
+    anotherReport: "Create Another Report",
+    email: "Email",
+    password: "Password",
+    loginTitle: "UrbanEye Login",
+    loginDescription: "Login to continue.",
+    loginMessage:
+      "Login UI is ready. Backend authentication will be added later.",
+    backHome: "← Back to Home",
+    languageLabel: "Select language",
+  },
+
+  Marathi: {
+    home: "मुख्यपृष्ठ",
+    explore: "पुणे एक्सप्लोर करा",
+    report: "समस्या नोंदवा",
+    login: "लॉगिन",
+    title: "समस्या पाहा. शहर सुधारा.",
+    description:
+      "UrbanEye नागरिकांना नागरी समस्या नोंदवण्यास आणि त्या जलद सोडवण्यास मदत करते.",
+    reportBtn: "समस्या नोंदवा",
+    exploreBtn: "पुणे एक्सप्लोर करा",
+    mapTitle: "पुणे नागरी नकाशा",
+    reports: "अहवाल",
+    open: "प्रलंबित समस्या",
+    resolved: "सोडवलेल्या समस्या",
+    trust: "समुदायाचा विश्वास",
+    demoReports: "● डेमो अहवाल",
+    categoryHeading: "तुम्हाला कोणती समस्या दिसली?",
+    categoryDescription: "समस्या निवडा आणि परिसर सुधारण्यास मदत करा.",
+    categoryLabel: "समस्या नोंदवा",
+    drainage: "गटाराची समस्या",
+    drainageDesc: "तुंबलेले किंवा वाहणारे गटार",
+    garbage: "कचरा",
+    garbageDesc: "रस्त्यावरील कचरा किंवा कचरा टाकणे",
+    pothole: "खड्डे",
+    potholeDesc: "रस्त्यावरील खड्डे किंवा खराब रस्ता",
+    exploreHeading: "आपले शहर समजून घ्या.",
+    exploreDescription: "परस्परसंवादी नकाशावर पुणे परिसर पाहा.",
+    howLabel: "हे कसे कार्य करते",
+    howHeading: "समस्येपासून उपायापर्यंत.",
+    stepReport: "नोंदवा",
+    stepReportDesc: "फोटो काढा आणि समस्येची नोंद करा.",
+    stepAI: "AI पडताळणी",
+    stepAIDesc: "AI समस्येची ओळख पटवण्यास मदत करते.",
+    stepPriority: "प्राधान्य ठरवा",
+    stepPriorityDesc: "समस्यांचे तीव्रतेनुसार वर्गीकरण होते.",
+    stepResolve: "निराकरण",
+    stepResolveDesc: "संबंधित अधिकारी समस्यांचे निराकरण करू शकतात.",
+    problemTitle: "समस्या नोंदवा",
+    selectCategory: "समस्येचा प्रकार निवडा.",
+    addPhoto: "फोटो जोडा",
+    photoDescription: "फोटोमुळे समस्या समजण्यास मदत होते.",
+    uploadPhoto: "फोटो अपलोड करा",
+    chooseImage: "डिव्हाइसमधून फोटो निवडण्यासाठी क्लिक करा",
+    imageLimit: "JPG, PNG किंवा WebP · कमाल 10 MB",
+    removePhoto: "फोटो काढून टाका",
+    locationTitle: "समस्या कुठे आहे?",
+    locationDescription: "समस्येचे ठिकाण लिहा.",
+    currentLocation: "माझे सध्याचे ठिकाण वापरा",
+    locationPermission: "ब्राउझरमध्ये स्थानाची परवानगी द्या",
+    locationDetected: "ठिकाण यशस्वीपणे मिळाले.",
+    locationDetecting: "ठिकाण शोधत आहे...",
+    locationFailed:
+      "ठिकाण मिळाले नाही. परवानगी द्या किंवा ठिकाण स्वतः लिहा.",
+    locationUnsupported: "या ब्राउझरमध्ये स्थान सुविधा उपलब्ध नाही.",
+    locationLabel: "ठिकाण किंवा निर्देशांक",
+    locationPlaceholder: "परिसर, रस्ता किंवा निर्देशांक लिहा",
+    describeTitle: "समस्येचे वर्णन करा",
+    describeDescription: "तुम्हाला दिसलेल्या समस्येबद्दल अधिक माहिती द्या.",
+    severity: "तीव्रता",
+    low: "कमी",
+    medium: "मध्यम",
+    high: "जास्त",
+    descriptionLabel: "समस्येचे वर्णन",
+    descriptionPlaceholder: "उदा. मुख्य रस्त्याजवळ मोठा खड्डा आहे...",
+    aiTitle: "AI पडताळणी",
+    aiDescription:
+      "AI द्वारे फोटो पडताळणी भविष्यात जोडली जाईल. या डेमोमध्ये AI विश्लेषण होत नाही.",
+    planned: "नियोजित",
+    submit: "डेमो तक्रार नोंदवा",
+    privacy: "हा फक्त डेमो आहे. तुमची तक्रार सर्व्हर किंवा डेटाबेसमध्ये पाठवली जात नाही.",
+    requiredCategory: "कृपया समस्येचा प्रकार निवडा.",
+    requiredLocation: "कृपया समस्येचे ठिकाण लिहा.",
+    shortDescription: "कृपया किमान 10 अक्षरांत समस्येचे वर्णन करा.",
+    invalidImage: "कृपया JPG, PNG किंवा WebP फोटो निवडा.",
+    largeImage: "फोटोचा आकार 10 MB किंवा त्यापेक्षा कमी असावा.",
+    reportReady: "तक्रार तयार झाली!",
+    demoSuccess:
+      "तुमची डेमो तक्रार तयार झाली आहे. ती डेटाबेसमध्ये जतन केलेली नाही.",
+    complaintId: "डेमो तक्रार क्रमांक",
+    status: "स्थिती",
+    submittedDemo: "नोंदवली (डेमो)",
+    anotherReport: "दुसरी तक्रार नोंदवा",
+    email: "ईमेल",
+    password: "पासवर्ड",
+    loginTitle: "UrbanEye लॉगिन",
+    loginDescription: "पुढे जाण्यासाठी लॉगिन करा.",
+    loginMessage:
+      "लॉगिन इंटरफेस तयार आहे. बॅकएंड प्रमाणीकरण नंतर जोडले जाईल.",
+    backHome: "← मुख्यपृष्ठावर परत जा",
+    languageLabel: "भाषा निवडा",
+  },
+
+  Hindi: {
+    home: "होम",
+    explore: "पुणे देखें",
+    report: "समस्या रिपोर्ट करें",
+    login: "लॉगिन",
+    title: "समस्या देखें। शहर सुधारें।",
+    description:
+      "UrbanEye नागरिकों को नागरिक समस्याओं की रिपोर्ट करने और उन्हें तेजी से हल करने में मदद करता है।",
+    reportBtn: "समस्या रिपोर्ट करें",
+    exploreBtn: "पुणे देखें",
+    mapTitle: "पुणे सिविक मैप",
+    reports: "रिपोर्ट",
+    open: "लंबित समस्याएँ",
+    resolved: "हल की गई समस्याएँ",
+    trust: "समुदाय का विश्वास",
+    demoReports: "● डेमो रिपोर्ट",
+    categoryHeading: "आपको क्या समस्या दिखी?",
+    categoryDescription: "समस्या चुनें और अपने इलाके को बेहतर बनाने में मदद करें।",
+    categoryLabel: "समस्या रिपोर्ट करें",
+    drainage: "नाली की समस्या",
+    drainageDesc: "बंद या बहती हुई नाली",
+    garbage: "कचरा",
+    garbageDesc: "सड़क किनारे कचरा या कचरा फेंकना",
+    pothole: "गड्ढे",
+    potholeDesc: "सड़क पर गड्ढे या खराब सड़क",
+    exploreHeading: "अपने शहर को समझें।",
+    exploreDescription: "इंटरैक्टिव मैप पर पुणे का क्षेत्र देखें।",
+    howLabel: "यह कैसे काम करता है",
+    howHeading: "समस्या से समाधान तक।",
+    stepReport: "रिपोर्ट करें",
+    stepReportDesc: "फोटो लें और समस्या की रिपोर्ट करें।",
+    stepAI: "AI जाँच",
+    stepAIDesc: "AI समस्या की पहचान करने में मदद करता है।",
+    stepPriority: "प्राथमिकता तय करें",
+    stepPriorityDesc: "समस्याओं को गंभीरता के अनुसार वर्गीकृत किया जाता है।",
+    stepResolve: "समाधान",
+    stepResolveDesc: "अधिकारी समस्याओं का समाधान कर सकते हैं।",
+    problemTitle: "समस्या रिपोर्ट करें",
+    selectCategory: "नागरिक समस्या का प्रकार चुनें।",
+    addPhoto: "फोटो जोड़ें",
+    photoDescription: "फोटो से समस्या समझने में मदद मिलती है।",
+    uploadPhoto: "फोटो अपलोड करें",
+    chooseImage: "अपने डिवाइस से फोटो चुनने के लिए क्लिक करें",
+    imageLimit: "JPG, PNG या WebP · अधिकतम 10 MB",
+    removePhoto: "फोटो हटाएँ",
+    locationTitle: "समस्या कहाँ है?",
+    locationDescription: "समस्या का स्थान दर्ज करें।",
+    currentLocation: "मेरी वर्तमान लोकेशन इस्तेमाल करें",
+    locationPermission: "ब्राउज़र में लोकेशन की अनुमति दें",
+    locationDetected: "लोकेशन सफलतापूर्वक मिल गई।",
+    locationDetecting: "लोकेशन खोजी जा रही है...",
+    locationFailed:
+      "लोकेशन नहीं मिली। अनुमति दें या स्थान खुद दर्ज करें।",
+    locationUnsupported: "यह ब्राउज़र लोकेशन सुविधा का समर्थन नहीं करता।",
+    locationLabel: "स्थान या निर्देशांक",
+    locationPlaceholder: "इलाके, सड़क या निर्देशांक दर्ज करें",
+    describeTitle: "समस्या का विवरण दें",
+    describeDescription: "आपको जो समस्या दिखी उसके बारे में बताएँ।",
+    severity: "गंभीरता",
+    low: "कम",
+    medium: "मध्यम",
+    high: "अधिक",
+    descriptionLabel: "समस्या का विवरण",
+    descriptionPlaceholder: "उदाहरण: मुख्य सड़क के पास बड़ा गड्ढा है...",
+    aiTitle: "AI सत्यापन",
+    aiDescription:
+      "AI फोटो सत्यापन भविष्य के संस्करण में जोड़ा जाएगा। इस डेमो में AI विश्लेषण नहीं होता।",
+    planned: "नियोजित",
+    submit: "डेमो रिपोर्ट सबमिट करें",
+    privacy: "यह केवल डेमो है। आपकी रिपोर्ट सर्वर या डेटाबेस में नहीं भेजी जाती।",
+    requiredCategory: "कृपया समस्या का प्रकार चुनें।",
+    requiredLocation: "कृपया समस्या का स्थान दर्ज करें।",
+    shortDescription: "कृपया कम से कम 10 अक्षरों में समस्या का विवरण दें।",
+    invalidImage: "कृपया JPG, PNG या WebP फोटो चुनें।",
+    largeImage: "फोटो का आकार 10 MB या उससे कम होना चाहिए।",
+    reportReady: "रिपोर्ट तैयार है!",
+    demoSuccess:
+      "आपकी डेमो रिपोर्ट तैयार हो गई है। इसे डेटाबेस में सेव नहीं किया गया है।",
+    complaintId: "डेमो शिकायत आईडी",
+    status: "स्थिति",
+    submittedDemo: "सबमिट हुई (डेमो)",
+    anotherReport: "एक और रिपोर्ट बनाएँ",
+    email: "ईमेल",
+    password: "पासवर्ड",
+    loginTitle: "UrbanEye लॉगिन",
+    loginDescription: "जारी रखने के लिए लॉगिन करें।",
+    loginMessage:
+      "लॉगिन इंटरफेस तैयार है। बैकएंड प्रमाणीकरण बाद में जोड़ा जाएगा।",
+    backHome: "← होम पर वापस जाएँ",
+    languageLabel: "भाषा चुनें",
+  },
+};
+
+const LanguageContext = createContext(null);
+
+export function LanguageProvider({ children }) {
+  const [language, setLanguage] = useState(() => {
+    const saved = localStorage.getItem("urbaneye-language");
+    return ["English", "Marathi", "Hindi"].includes(saved)
+      ? saved
+      : "English";
+  });
+
+  function changeLanguage(nextLanguage) {
+    if (!translations[nextLanguage]) return;
+    localStorage.setItem("urbaneye-language", nextLanguage);
+    setLanguage(nextLanguage);
+  }
+
+  const t = translations[language];
+
+  return (
+    <LanguageContext.Provider value={{ language, changeLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+}
+
+export function useLanguage() {
+  const context = useContext(LanguageContext);
+
+  if (!context) {
+    throw new Error("useLanguage must be used inside LanguageProvider");
+  }
+
+  return context;
+}
