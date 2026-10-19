@@ -1260,3 +1260,28 @@ footer p {
     padding: 24px;
   }
 }
+
+.civic-map-container {
+  width: 100%;
+  height: 380px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+}
+
+.civic-map {
+  width: 100%;
+  height: 100%;
+  background: #0c1020;
+  z-index: 1;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: #101426;
+  color: #ffffff;
+}
+
+.leaflet-popup-content {
+  line-height: 1.7;
+}

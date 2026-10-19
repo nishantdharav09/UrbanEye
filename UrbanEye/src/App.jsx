@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import {
   BrowserRouter,
@@ -9,6 +10,7 @@ import {
 
 import "./App.css";
 import ReportProblem from "./ReportProblem";
+import CivicMap from "./CivicMap";
 
 const text = {
   English: {
@@ -27,7 +29,6 @@ const text = {
     resolved: "Resolved",
     trust: "Community Trust",
   },
-
   Marathi: {
     home: "मुख्यपृष्ठ",
     explore: "पुणे एक्सप्लोर करा",
@@ -44,7 +45,6 @@ const text = {
     resolved: "सोडवलेल्या",
     trust: "समुदायाचा विश्वास",
   },
-
   Hindi: {
     home: "होम",
     explore: "पुणे एक्सप्लोर करें",
@@ -75,7 +75,6 @@ function Home() {
 
   return (
     <div className="app">
-      {/* NAVBAR */}
       <nav className="navbar">
         <Link to="/" className="logo">
           Urban<span>Eye</span>
@@ -93,7 +92,6 @@ function Home() {
           </button>
 
           <Link to="/report">{t.report}</Link>
-
           <Link to="/login">{t.login}</Link>
         </div>
 
@@ -111,7 +109,6 @@ function Home() {
       </nav>
 
       <main>
-        {/* HERO */}
         <section className="hero">
           <div className="hero-content">
             <div className="badge">
@@ -119,7 +116,6 @@ function Home() {
             </div>
 
             <h1>{t.title}</h1>
-
             <p>{t.description}</p>
 
             <div className="hero-buttons">
@@ -137,7 +133,6 @@ function Home() {
             </div>
           </div>
 
-          {/* HERO MAP */}
           <div className="hero-map">
             <div className="map-card">
               <div className="map-card-top">
@@ -146,24 +141,17 @@ function Home() {
               </div>
 
               <div className="map-visual">
-                <div className="map-road road1"></div>
-                <div className="map-road road2"></div>
-                <div className="map-road road3"></div>
-
-                <span className="map-marker red">●</span>
-                <span className="map-marker yellow">●</span>
-                <span className="map-marker green">●</span>
+                <CivicMap />
               </div>
 
               <div className="map-bottom">
-                <span>● Live reports</span>
+                <span>● Demo reports</span>
                 <span>Pune</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* STATS */}
         <section className="stats">
           <div>
             <strong>1,248</strong>
@@ -186,13 +174,10 @@ function Home() {
           </div>
         </section>
 
-        {/* CATEGORIES */}
         <section className="categories">
           <div className="section-title">
             <small>REPORT A PROBLEM</small>
-
             <h2>What did you find?</h2>
-
             <p>
               Choose an issue and help improve your neighbourhood.
             </p>
@@ -219,30 +204,20 @@ function Home() {
           </div>
         </section>
 
-        {/* EXPLORE */}
         <section className="explore" id="explore">
           <div>
             <small>EXPLORE PUNE</small>
-
             <h2>Understand your city.</h2>
-
-            <p>
-              Explore reported civic issues across Pune.
-            </p>
+            <p>Explore the Pune area on the interactive map.</p>
           </div>
 
           <div className="real-map">
-            <iframe
-              title="Pune Map"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=73.75%2C18.45%2C73.95%2C18.65&layer=mapnik"
-            ></iframe>
+            <CivicMap />
           </div>
         </section>
 
-        {/* HOW IT WORKS */}
         <section className="how">
           <small>HOW IT WORKS</small>
-
           <h2>From problem to action.</h2>
 
           <div className="steps">
@@ -277,7 +252,6 @@ function Home() {
         </section>
       </main>
 
-      {/* FOOTER */}
       <footer>
         <Link to="/" className="logo">
           Urban<span>Eye</span>
@@ -295,36 +269,26 @@ function Home() {
   );
 }
 
-/* LOGIN PAGE */
 function Login() {
   const navigate = useNavigate();
-
   const [message, setMessage] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setMessage("Login UI is ready. Backend authentication will be added later.");
+    setMessage(
+      "Login UI is ready. Backend authentication will be added later."
+    );
   };
 
   return (
     <div className="simple-page">
       <div className="simple-card">
         <h1>UrbanEye Login</h1>
-
         <p>Login to continue.</p>
 
         <form onSubmit={handleLogin}>
-          <input
-            placeholder="Email"
-            type="email"
-            required
-          />
-
-          <input
-            placeholder="Password"
-            type="password"
-            required
-          />
+          <input placeholder="Email" type="email" required />
+          <input placeholder="Password" type="password" required />
 
           <button type="submit" className="primary-btn">
             Login
@@ -345,22 +309,13 @@ function Login() {
   );
 }
 
-/* APP */
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-
-        <Route
-          path="/report"
-          element={<ReportProblem />}
-        />
-
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+        <Route path="/report" element={<ReportProblem />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
