@@ -31,6 +31,7 @@ function Home() {
 
         <div className="nav-links">
           <Link to="/">{t.home}</Link>
+
           <button
             type="button"
             className="nav-link-button"
@@ -38,6 +39,7 @@ function Home() {
           >
             {t.explore}
           </button>
+
           <Link to="/report">{t.report}</Link>
           <Link to="/login">{t.login}</Link>
         </div>
@@ -88,7 +90,18 @@ function Home() {
               </div>
 
               <div className="map-visual">
-                <CivicMap />
+                <div className="mini-map-placeholder">
+                  <span className="mini-map-pin">📍</span>
+                  <strong>Pune, Maharashtra</strong>
+                  <p>Explore civic issues across Pune</p>
+
+                  <Link
+                    to="/explore-map"
+                    className="mini-map-button"
+                  >
+                    View Civic Map →
+                  </Link>
+                </div>
               </div>
 
               <div className="map-bottom">
@@ -104,14 +117,17 @@ function Home() {
             <strong>1,248</strong>
             <span>{t.reports}</span>
           </div>
+
           <div>
             <strong>321</strong>
             <span>{t.open}</span>
           </div>
+
           <div>
             <strong>927</strong>
             <span>{t.resolved}</span>
           </div>
+
           <div>
             <strong>94%</strong>
             <span>{t.trust}</span>
@@ -151,10 +167,25 @@ function Home() {
             <small>{t.explore}</small>
             <h2>{t.exploreHeading}</h2>
             <p>{t.exploreDescription}</p>
+
+            <Link
+              to="/explore-map"
+              className="primary-btn explore-map-link"
+            >
+              Open Full Pune Map →
+            </Link>
           </div>
 
-          <div className="real-map">
-            <CivicMap />
+          <div className="explore-preview-card">
+            <div className="explore-preview-icon">🗺️</div>
+            <h3>Pune Civic Issues Map</h3>
+            <p>
+              Explore demo reports across Pune, including high,
+              medium and low severity locations.
+            </p>
+            <Link to="/explore-map" className="mini-map-button">
+              Explore Map →
+            </Link>
           </div>
         </section>
 
@@ -203,10 +234,29 @@ function Home() {
           <Link to="/">{t.home}</Link>
           <Link to="/report">{t.report}</Link>
           <Link to="/login">{t.login}</Link>
+          <Link to="/explore-map">Civic Map</Link>
         </div>
 
         <p>© 2026 UrbanEye</p>
       </footer>
+    </div>
+  );
+}
+
+function ExploreMap() {
+  return (
+    <div className="explore-map-page">
+      <div className="explore-map-topbar">
+        <Link to="/" className="back-home-link">
+          ← Back to Home
+        </Link>
+
+        <span className="explore-map-brand">
+          Urban<span>Eye</span>
+        </span>
+      </div>
+
+      <CivicMap />
     </div>
   );
 }
@@ -234,6 +284,7 @@ function Login() {
             aria-label={t.email}
             required
           />
+
           <input
             placeholder={t.password}
             type="password"
@@ -270,6 +321,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/report" element={<ReportProblem />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/explore-map" element={<ExploreMap />} />
         </Routes>
       </BrowserRouter>
     </LanguageProvider>

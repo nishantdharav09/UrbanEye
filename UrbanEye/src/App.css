@@ -1352,3 +1352,129 @@ footer p {
   }
 }
 
+
+/* UrbanEye map preview */
+
+.mini-map-placeholder {
+  min-height: 220px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 22px;
+  text-align: center;
+  color: #e5e7eb;
+  background:
+    radial-gradient(circle at 25% 25%, #263c58 0, transparent 40%),
+    radial-gradient(circle at 75% 70%, #183c3b 0, transparent 45%),
+    #111827;
+  border: 1px solid #334155;
+  border-radius: 14px;
+}
+
+.mini-map-pin {
+  font-size: 32px;
+}
+
+.mini-map-placeholder strong {
+  font-size: 18px;
+}
+
+.mini-map-placeholder p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.mini-map-button,
+.back-home-link {
+  display: inline-block;
+  padding: 11px 16px;
+  color: #ffffff;
+  text-decoration: none;
+  background: #2563eb;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.mini-map-button:hover,
+.back-home-link:hover {
+  background: #1d4ed8;
+}
+
+.explore-map-link {
+  display: inline-block;
+  margin-top: 16px;
+  text-decoration: none;
+}
+
+.explore-preview-card {
+  padding: 30px;
+  background: #111827;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  color: #e5e7eb;
+}
+
+.explore-preview-icon {
+  font-size: 42px;
+}
+
+.explore-preview-card h3 {
+  margin: 16px 0 10px;
+  font-size: 23px;
+}
+
+.explore-preview-card p {
+  margin-bottom: 22px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.explore-map-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 24px;
+  color: #e5e7eb;
+  background: #0b1120;
+}
+
+.explore-map-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.explore-map-brand {
+  color: #f8fafc;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.explore-map-brand span {
+  color: #60a5fa;
+}
+
+.back-home-link {
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .explore-map-page {
+    padding: 14px;
+  }
+
+  .explore-map-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .mini-map-placeholder {
+    min-height: 190px;
+  }
+}
