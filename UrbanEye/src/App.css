@@ -1478,3 +1478,93 @@ footer p {
     min-height: 190px;
   }
 }
+
+/* Fix Open Full Pune Map button alignment */
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+}
+
+.hero-buttons .primary-btn,
+.hero-buttons .secondary-btn {
+  width: auto;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .hero-buttons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 650px) {
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-buttons .primary-btn,
+  .hero-buttons .secondary-btn {
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+/* Open Full Pune Map button alignment fix */
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  margin-top: 25px;
+}
+
+.hero-buttons .primary-btn,
+.hero-buttons .secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-height: 44px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Tablet and mobile */
+@media (max-width: 900px) {
+  .hero-buttons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 650px) {
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-buttons .primary-btn,
+  .hero-buttons .secondary-btn {
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+/* Fix Open Full Pune Map button alignment only */
+.explore .explore-map-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin-top: 16px;
+  vertical-align: middle;
+}
+
