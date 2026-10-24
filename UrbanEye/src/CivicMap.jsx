@@ -9,6 +9,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "./CivicMap.css";
+import { useLanguage } from "./LanguageContext";
 
 const reports = [
   { id: 1, area: "Shivajinagar", position: [18.5308, 73.8475], category: "Pothole", severity: "High", status: "Open", complaints: 6 },
@@ -27,6 +28,86 @@ const reports = [
   { id: 14, area: "Chinchwad", position: [18.6298, 73.7811], category: "Garbage", severity: "Low", status: "Resolved", complaints: 2 },
   { id: 15, area: "Wagholi", position: [18.5793, 73.9780], category: "Drainage", severity: "Low", status: "Open", complaints: 2 },
 ];
+
+const mapTranslations = {
+  English: {
+    tag: "URBANEYE • DEMO DATA",
+    title: "Pune Civic Issues Map",
+    description: "Explore reported civic issues across Pune and nearby areas.",
+    totalReports: "Total Reports",
+    highSeverity: "High Severity",
+    mediumSeverity: "Medium Severity",
+    lowSeverity: "Low Severity",
+    areas: "areas",
+    high: "High",
+    medium: "Medium",
+    low: "Low",
+    dotNote: "Dot size reflects the number of demo complaints",
+    category: "Category",
+    severity: "Severity",
+    status: "Status",
+    complaints: "Demo complaints",
+    open: "Open",
+    inProgress: "In Progress",
+    resolved: "Resolved",
+    pothole: "Pothole",
+    garbage: "Garbage",
+    drainage: "Drainage",
+    disclaimer: "Demo visualization only. Marker locations, severity levels and complaint counts are sample data, not verified live civic reports.",
+  },
+
+  Marathi: {
+    tag: "URBANEYE • प्रात्यक्षिक माहिती",
+    title: "पुणे नागरी समस्या नकाशा",
+    description: "पुणे आणि जवळच्या भागांतील नोंदवलेल्या नागरी समस्या पाहा.",
+    totalReports: "एकूण तक्रारी",
+    highSeverity: "तीव्र समस्या",
+    mediumSeverity: "मध्यम समस्या",
+    lowSeverity: "कमी तीव्रतेच्या समस्या",
+    areas: "भाग",
+    high: "जास्त",
+    medium: "मध्यम",
+    low: "कमी",
+    dotNote: "ठिपक्याचा आकार डेमो तक्रारींची संख्या दर्शवतो",
+    category: "प्रकार",
+    severity: "तीव्रता",
+    status: "स्थिती",
+    complaints: "डेमो तक्रारी",
+    open: "प्रलंबित",
+    inProgress: "काम सुरू आहे",
+    resolved: "निराकरण झाले",
+    pothole: "खड्डा",
+    garbage: "कचरा",
+    drainage: "गटार",
+    disclaimer: "हा केवळ प्रात्यक्षिक नकाशा आहे. ठिकाणे, तीव्रता आणि तक्रारींची संख्या नमुना माहिती आहे; ती प्रत्यक्ष पडताळलेली माहिती नाही.",
+  },
+
+  Hindi: {
+    tag: "URBANEYE • डेमो डेटा",
+    title: "पुणे नागरिक समस्या मानचित्र",
+    description: "पुणे और आसपास के क्षेत्रों में दर्ज नागरिक समस्याएँ देखें।",
+    totalReports: "कुल शिकायतें",
+    highSeverity: "गंभीर समस्याएँ",
+    mediumSeverity: "मध्यम समस्याएँ",
+    lowSeverity: "कम गंभीरता वाली समस्याएँ",
+    areas: "क्षेत्र",
+    high: "अधिक",
+    medium: "मध्यम",
+    low: "कम",
+    dotNote: "बिंदु का आकार डेमो शिकायतों की संख्या दर्शाता है",
+    category: "श्रेणी",
+    severity: "गंभीरता",
+    status: "स्थिति",
+    complaints: "डेमो शिकायतें",
+    open: "खुली",
+    inProgress: "काम जारी है",
+    resolved: "हल हो गई",
+    pothole: "गड्ढा",
+    garbage: "कचरा",
+    drainage: "नाली",
+    disclaimer: "यह केवल डेमो मानचित्र है। स्थान, गंभीरता और शिकायतों की संख्या नमूना डेटा है, सत्यापित लाइव शिकायतें नहीं।",
+  },
+};
 
 function getColor(severity) {
   switch (severity) {
@@ -63,6 +144,9 @@ function FitPuneMap() {
 }
 
 export default function CivicMap() {
+  const { language } = useLanguage();
+  const t = mapTranslations[language] || mapTranslations.English;
+
   const totalComplaints = reports.reduce(
     (total, report) => total + report.complaints,
     0
@@ -80,47 +164,64 @@ export default function CivicMap() {
     (report) => report.severity === "Low"
   ).length;
 
+  const translateCategory = (category) => {
+    if (category === "Pothole") return t.pothole;
+    if (category === "Garbage") return t.garbage;
+    if (category === "Drainage") return t.drainage;
+    return category;
+  };
+
+  const translateSeverity = (severity) => {
+    if (severity === "High") return t.high;
+    if (severity === "Medium") return t.medium;
+    if (severity === "Low") return t.low;
+    return severity;
+  };
+
+  const translateStatus = (status) => {
+    if (status === "Open") return t.open;
+    if (status === "In Progress") return t.inProgress;
+    if (status === "Resolved") return t.resolved;
+    return status;
+  };
+
   return (
     <div className="civic-map-page">
       <div className="civic-map-header">
         <div>
-          <span className="civic-map-tag">URBANEYE • DEMO DATA</span>
-          <h1>Pune Civic Issues Map</h1>
-          <p>
-            Explore reported civic issues across Pune and nearby areas.
-          </p>
+          <span className="civic-map-tag">{t.tag}</span>
+          <h1>{t.title}</h1>
+          <p>{t.description}</p>
         </div>
       </div>
 
       <div className="civic-map-stats">
         <div className="civic-stat-card">
-          <span className="civic-stat-label">Total Reports</span>
+          <span className="civic-stat-label">{t.totalReports}</span>
           <strong>{totalComplaints}</strong>
         </div>
 
         <div className="civic-stat-card">
-          <span className="civic-stat-label">High Severity</span>
-          <strong className="high-text">{highCount} areas</strong>
+          <span className="civic-stat-label">{t.highSeverity}</span>
+          <strong className="high-text">{highCount} {t.areas}</strong>
         </div>
 
         <div className="civic-stat-card">
-          <span className="civic-stat-label">Medium Severity</span>
-          <strong className="medium-text">{mediumCount} areas</strong>
+          <span className="civic-stat-label">{t.mediumSeverity}</span>
+          <strong className="medium-text">{mediumCount} {t.areas}</strong>
         </div>
 
         <div className="civic-stat-card">
-          <span className="civic-stat-label">Low Severity</span>
-          <strong className="low-text">{lowCount} areas</strong>
+          <span className="civic-stat-label">{t.lowSeverity}</span>
+          <strong className="low-text">{lowCount} {t.areas}</strong>
         </div>
       </div>
 
       <div className="civic-map-legend">
-        <span><i className="legend-dot high-dot" /> High</span>
-        <span><i className="legend-dot medium-dot" /> Medium</span>
-        <span><i className="legend-dot low-dot" /> Low</span>
-        <span className="legend-note">
-          Dot size reflects the number of demo complaints
-        </span>
+        <span><i className="legend-dot high-dot" /> {t.high}</span>
+        <span><i className="legend-dot medium-dot" /> {t.medium}</span>
+        <span><i className="legend-dot low-dot" /> {t.low}</span>
+        <span className="legend-note">{t.dotNote}</span>
       </div>
 
       <div className="civic-map-container">
@@ -152,15 +253,23 @@ export default function CivicMap() {
               <Popup>
                 <div className="civic-map-popup">
                   <h3>{report.area}</h3>
-                  <p><strong>Category:</strong> {report.category}</p>
                   <p>
-                    <strong>Severity:</strong>{" "}
+                    <strong>{t.category}:</strong>{" "}
+                    {translateCategory(report.category)}
+                  </p>
+                  <p>
+                    <strong>{t.severity}:</strong>{" "}
                     <span style={{ color: getColor(report.severity) }}>
-                      {report.severity}
+                      {translateSeverity(report.severity)}
                     </span>
                   </p>
-                  <p><strong>Status:</strong> {report.status}</p>
-                  <p><strong>Demo complaints:</strong> {report.complaints}</p>
+                  <p>
+                    <strong>{t.status}:</strong>{" "}
+                    {translateStatus(report.status)}
+                  </p>
+                  <p>
+                    <strong>{t.complaints}:</strong> {report.complaints}
+                  </p>
                 </div>
               </Popup>
             </CircleMarker>
@@ -168,10 +277,7 @@ export default function CivicMap() {
         </MapContainer>
       </div>
 
-      <p className="civic-map-disclaimer">
-        Demo visualization only. Marker locations, severity levels and
-        complaint counts are sample data, not verified live civic reports.
-      </p>
+      <p className="civic-map-disclaimer">{t.disclaimer}</p>
     </div>
   );
 }
